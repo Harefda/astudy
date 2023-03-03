@@ -1,0 +1,60 @@
+<section class="basket-banner">
+    <div class="container">
+        <ul class="nav-pages-list white">
+            <li><a routerLink="/"><img src="assets/images//home-white-icon.svg" alt="Alternate Text"></a></li>
+            <li><a>Cart</a></li>
+        </ul>
+        <h3>Shopping Cart</h3>
+    </div>
+</section>
+<section class="section-wrap basket-box">
+    <div class="container">
+        <div class="basket-wrap">
+            <div class="basket-list">
+                <h3 *ngIf="courses.length !== 1">{{ courses.length }} Courses in Cart</h3>
+                <h3 *ngIf="courses.length === 1">{{ courses.length }} Course in Cart</h3>
+                <div class="basket-list-container">
+                    <div class="basket-block" *ngFor="let course of courses; index as i">
+                        <a class="basket-photo" routerLink="/course/{{ course.slug }}">
+                            <img src="http://localhost:8000{{ course.image }}" alt="Alternate Text">
+                        </a>
+                        <a class="basket-description" routerLink="/course/{{ course.slug }}">
+                            <h3>{{ course.title }}</h3>
+                            <p>{{ course.subtitle }}</p>
+                        </a>
+                        <ul class="basket-settings-list">
+                            <li><a (click)="removeCourseFromCart(course.slug, i)">Remove</a></li>
+                            <li><a (click)="moveCourseToSavedForLater(course.slug, i)">Save for later</a></li>
+                            <li *ngIf="user"><a (click)="moveCourseToWishlist(course.slug, i)">Move to Wishlist</a></li>
+                        </ul>
+                        <a routerLink="/course/{{ course.slug }}" class="basket-course-price-box">
+                            <div class="basket-course-prices">
+                                <div class="basket-price">{{ course.discount ? course.discount.new_price : course.price}}$</div>
+                                <div class="basket-new-price" *ngIf="course.discount">{{ course.price}}$</div>
+                            </div>
+                            <svg-icon class="hidden" *ngIf="!course.discount" src="assets/images/price-tag.svg" [svgStyle]="{'width.px': 20, 'height.px': 20, 'fill': '#6f85bd', 'margin': '0 5px 0 8px'}"></svg-icon>
+                            <svg-icon [tooltip]="course.discount.applied_coupon" *ngIf="course.discount" src="assets/images/price-tag.svg" [svgStyle]="{'width.px': 20, 'height.px': 20, 'fill': '#6f85bd', 'margin': '0 5px 0 8px'}"></svg-icon>
+                        </a>
+                    </div>
+                    <div *ngIf="courses.length === 0" class="basket-empty-box">
+                        <p>Your cart is empty. Keep shopping to find a course!</p>
+                    </div>
+                </div>
+
+                <app-saved-for-later></app-saved-for-later>
+
+                <app-cart-wishlist *ngIf="user"></app-cart-wishlist>
+            </div>
+            
+            <div class="basket-info">
+                <h6>Total:</h6>
+                <div class="basket-sums">
+                    <p class="basket-all-sum">{{ total }}$</p>
+                    <p class="basket-all-sub-sum" *ngIf="total !== subTotal">{{ subTotal }}$</p>
+                </div>
+                <button class="btn-blue btn-checkout" (click)="checkout()" [disabled]="courses.length === 0">Checkout</button>
+                <app-cart-coupons></app-cart-coupons>
+            </div>
+        </div>
+    </div>
+</section>

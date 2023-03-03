@@ -1,0 +1,444 @@
+<section class="course-banner">
+    <div class="container">
+        <div class="cource-info-box">
+            <div class="course-banner-block">
+                <h4>{{ title }}</h4>
+                <p class="cource-name">{{ subtitle }}</p>
+                <div class="cource-rating">
+                    <p class="count-star">4,5</p>
+                    <ul class="rating-list">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li class="rating-half"></li>
+                    </ul>
+                    <p class="rating-course">(51 rate) {{ studentsCount }} students</p>
+                </div>
+                <p class="cource-author">
+                    <span>Created by:</span>
+                    <a href="#">Валерий Жданов</a>
+                </p>
+                <div class="cource-main-info">
+                    <p>
+                        <img src="assets/images/cource-icon-1.svg" alt="Alternate Text">
+                        <span>Last update: 8/2018</span>
+                    </p>
+                    <p>
+                        <img src="assets/images/cource-icon-2.svg" alt="Alternate Text">
+                        <span>English</span>
+                    </p>
+                </div>
+                <div class="cource-btns">
+                    <button class="white-icon-btn" (click)="addOrRemoveCourseToWishlist()" [disabled]="addToWishlistIsLoading">
+                        <span *ngIf="!alraedyInWihlist">Add to wishlist</span>
+                        <span *ngIf="alraedyInWihlist">Wishlisted</span>
+                        <img *ngIf="!alraedyInWihlist" src="assets/images/like-icon.svg" alt="Alternate Text">
+                        <img *ngIf="alraedyInWihlist" src="assets/images/active-like-icon.png" alt="Alternate Text">
+                    </button>
+                    <button href="#" class="white-icon-btn">
+                        <span>Share</span>
+                        <img src="assets/images/share-white-icon.svg" alt="Alternate Text">
+                    </button>
+                </div>
+            </div>
+
+            <div class="about-cource">
+                <a href="#" class="cource-video-link">
+                    <img class="course-photo" src="http://localhost:8000{{ imageUrl }}" alt="Alternate Text">
+                    <div class="cource-video-content">
+                        <img src="assets/images/play.svg" alt="Alternate Text">
+                        <p>Preview this course</p>
+                    </div>
+                </a>
+                <div class="about-cource-box">
+                    <div class="about-cource-price">
+                        <b>{{ price }} $</b>
+                    </div>
+                    <a class="red-btn open-modal add-to-cart-btn" (click)="addCourseToCart()" *ngIf="!alreadyInCart">Add to cart</a>
+                    <a class="black-btn open-modal add-to-cart-btn" routerLink="/cart" *ngIf="alreadyInCart">Go to cart</a>
+                    <a href="#" class="btn-white gray-border">Buy now</a>
+                    <h4>This course includes:</h4>
+                    <ul class="include-list">
+                        <li>
+                            <img src="assets/images/include-icon-1.svg" alt="Alternate Text">
+                            <p>{{ durationTime.hours }}<span *ngIf="durationTime.minutes > 15">.5</span> hours on-demand video</p>
+                        </li>
+                        <li>
+                            <img src="assets/images/include-icon-2.svg" alt="Alternate Text">
+                            <p>Full lifetime access</p>
+                        </li>
+                        <li>
+                            <img src="assets/images/include-icon-3.svg" alt="Alternate Text">
+                            <p>Access on mobile and TV</p>
+                        </li>
+                        <li>
+                            <img src="assets/images/include-icon-4.svg" alt="Alternate Text">
+                            <p>Certificate of completion</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section-wrap">
+    <div class="container">
+        <div class="cource-left-box">
+            <div class="cource-fist-box cource-gray-box">
+                <h3 class="title title-left">What you'll learn</h3>
+                <div class="accordion" [ngClass]="{'active': openedGoalsList || goals.length <= 10 }">
+                    <div class="accordion-content-goals" [ngClass]="{'hidden-accordion': !openedGoalsList && goals.length > 10 }" >
+                        <ul class="what-learning-list">
+                            <li *ngFor="let goal of goals; index as i" [ngClass]="{
+                                'almost-hidden-goal': !openedGoalsList && ( i === 8 || i === 9 ),
+                                'hidden-goal': !openedGoalsList && i > 9
+                            }">{{ goal.goal }}</li>
+                        </ul>
+                    </div>
+                    <div class="accordion-btn" (click)="switchGoalsListOpenMode()" *ngIf="goals.length > 10"></div>
+                </div>
+            </div>
+
+            <div class="cource-box-content">
+                <h3 class="title title-left">Requirements:</h3>
+                <ul class="affiliate-list">
+                    <li *ngFor="let requirement of requirements">{{ requirement.requirement }}</li>
+                </ul>
+            </div>
+
+            <div class="cource-box-content">
+                <h3 class="title title-left">Description:</h3>
+                <div class="accordion" [ngClass]="{'active': openedDescription}">
+                    <div class="accordion-content-description" [ngClass]="{'hidden-accordion hidden-description': !openedDescription && descriptionel.offsetHeight > 330}" >
+                        <div class="course-description">
+                            <h4>** Edited in August 2020! **</h4>
+                            <p class="course-description-text" #descriptionel>{{ description }}</p>
+                        </div>
+                    </div>
+                    <div class="accordion-btn" (click)="switchDescriptionOpenMode()" *ngIf="descriptionel.offsetHeight > 330"></div>
+                </div>
+            </div>
+
+            <div class="cource-gray-box">
+                <h3 class="title title-left">Featured review</h3>
+
+                <div class="reviews-single-box">
+                    <div class="reviews-single-top">
+                        <div class="reviews-single-photo">
+                            <img src="assets/images/person-photo-1.png" alt="Alternate Text">
+                        </div>
+                        <div class="reviews-single-info">
+                            <h4>Андре Феррейра Миранда</h4>
+                            <p>3 курса</p>
+                            <p>1 отзыв</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <ul class="rating-list rating-big">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li class="rating-half"></li>
+                        </ul>
+                        <p>4 месяца назад</p>
+                    </div>
+                    <div class="reviews-single-content">
+                        <p>
+                            Мне очень понравились уроки Excel, которые помогли мне улучшить свои знания. Остальные классы также очень интересны,
+                            с&nbsp;множеством практических примеров, которые позволяют мне полностью понять теорию, лежащую в&nbsp;основе этого.
+                            Также курс ведется на&nbsp;английском языке, что позволяет мне учиться двумя способами. Сам класс и&nbsp;как пользоваться терминологией на&nbsp;английском языке.
+                        </p>
+                    </div>
+                    <div class="is-helpful-review">
+                        <p>Этот отзыв оказался полезным?</p>
+                        <div class="helpful-review-btns">
+                            <span class="like-btn"><img src="assets/images/like.svg" alt="Alternate Text"></span>
+                            <span class="dislike-btn"><img src="assets/images/dislike.svg" alt="Alternate Text"></span>
+                            <a href="#">Пожаловаться</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cource-box-content">
+                <div class="faq-wrap faq-cource">
+                    <div class="faq-block" #sectionel *ngFor="let section of sections; index as i" [ngStyle]="{'display' : openedAllSections || i < 10  ? 'block' : 'none'}">
+                        <div class="faq-title" (click)="openSection(sectionel)">
+                            <h3>{{ section.title }}</h3>
+                            <p>
+                                {{ section.lectures_count }} lectures
+                                <span><span *ngIf="section.duration_time.hours">{{ section.duration_time.hours }}hr </span>{{ section.duration_time.minutes }}min</span>
+                            </p>
+                        </div>
+                        <div class="faq-info" style="display: none"
+                             [@openCloseSection]="{value: sectionel.classList.contains('faq-active'), params: {maxHeight: section.lectures.length * 40 + 140}}"
+                             (@openCloseSection.start)="$event.element.style.display = 'block'; $event.element.style.maxHeight = $event.element.style.height"
+                             (@openCloseSection.done)="$event.element.style.display = ($event.toState ? 'block' : 'none'); $event.element.style.maxHeight = null">
+                            <div class="faq-sub" *ngFor="let lecture of section.lectures">
+                                <div class="faq-sub-top">
+                                    <h3 class="faq-cource-name" #lecturenameel>
+                                        <img src="assets/images/play-small.svg" alt="Alternate Text">
+                                        <span>{{ lecture.title }}</span>
+                                        <button class="faq-lecture-open-desc" *ngIf="lecture.description" (click)="openLectureDescription(lecturenameel)"></button>
+                                    </h3>
+                                    <div class="faq-cource-info">
+                                        <a href="#">Preview</a>
+                                        <p> <span *ngIf="lecture.duration_time.hours">{{ lecture.duration_time.hours | number:"2.0" }}:</span>{{ lecture.duration_time.minutes | number:'2.0' }}:{{ lecture.duration_time.seconds | number:'2.0' }}</p>
+                                    </div>
+                                </div>
+                                <div class="faq-sub-content" *ngIf="lecture.description"
+                                     [@openCloseLectureDescription]="lecturenameel.classList.contains('active')"
+                                     (@openCloseLectureDescription.start)="$event.element.style.display = 'block'"
+                                     (@openCloseLectureDescription.done)="$event.element.style.display = ($event.toState ? 'block' : 'none')">
+                                    <p>{{ lecture.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a class="show-more-cource btn-blue big-blue-btn" (click)="openAllSections()" [ngStyle]="{'display' : openedAllSections || sectionsCount < 10 ? 'none' : 'flex'}">Еще 1 раздела</a>
+            </div>
+
+            <div class="cource-box-content">
+                <h2 class="title title-left">Отзывы студентов</h2>
+                <div class="rate-student">
+                    <div class="rata-cource">
+                        <h4>3.1</h4>
+                        <ul class="rating-list rating-big">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li class="rating-empty"></li>
+                            <li class="rating-empty"></li>
+                        </ul>
+                        <p>Рейтинг курса</p>
+                    </div>
+                    <ul class="rate-cource-list">
+                        <li class="rate-line">
+                            <span class="rate-width">
+                                <span style="width:34%;"></span>
+                            </span>
+                            <ul class="rating-list rating-big">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li class="rating-empty"></li>
+                            </ul>
+                            <p>34</p>
+                        </li>
+                        <li class="rate-line">
+                            <span class="rate-width">
+                                <span style="width:33%;"></span>
+                            </span>
+                            <ul class="rating-list rating-big">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                            </ul>
+                            <p>33</p>
+                        </li>
+                        <li class="rate-line">
+                            <span class="rate-width">
+                                <span style="width:10%;"></span>
+                            </span>
+                            <ul class="rating-list rating-big">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                            </ul>
+                            <p>10</p>
+                        </li>
+                        <li class="rate-line">
+                            <span class="rate-width">
+                                <span style="width:7%;"></span>
+                            </span>
+                            <ul class="rating-list rating-big">
+                                <li></li>
+                                <li></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                            </ul>
+                            <p>7</p>
+                        </li>
+                        <li class="rate-line">
+                            <span class="rate-width">
+                                <span style="width:16%;"></span>
+                            </span>
+                            <ul class="rating-list rating-big">
+                                <li></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                                <li class="rating-empty"></li>
+                            </ul>
+                            <p>16</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cource-box-content">
+                <h2 class="title title-left">Отзывы</h2>
+                <div class="reviews-form">
+                    <input class="search-big" type="text" name="search" placeholder="Поиск по отзывам">
+                    <select class="select select-big">
+                        <option value="all">Все оценки</option>
+                        <option value="new">Только нвоые оценки</option>
+                        <option value="old">Только старые оценки</option>
+                    </select>
+                </div>
+
+                <div class="reviews-list">
+                    <div class="accordion">
+                        <div class="accordion-content accordion140">
+                            <div class="reviews-single-box">
+                                <div class="reviews-single-top">
+                                    <div class="reviews-single-photo">
+                                        <img src="assets/images/person-photo-1.png" alt="Alternate Text">
+                                    </div>
+                                    <div class="reviews-single-info">
+                                        <h4>Андре Феррейра Миранда</h4>
+                                        <div class="review-rating">
+                                            <ul class="rating-list rating-big">
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                                <li class="rating-half"></li>
+                                            </ul>
+                                            <p>4 месяца назад</p>
+                                        </div>
+                                        <div class="reviews-single-content">
+                                            <p>
+                                                Мне очень понравились уроки Excel, которые помогли мне улучшить свои знания. Остальные классы также очень интересны, с&nbsp;множеством практических примеров, которые позволяют мне полностью понять теорию, лежащую в&nbsp;основе этого. Также курс ведется на&nbsp;английском языке, что позволяет мне учиться двумя способами. Сам класс и&nbsp;как пользоваться терминологией на&nbsp;английском языке.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="accordion-btn-box">
+                            <div class="accordion-btn"></div>
+                            <div class="is-helpful-review">
+                                <p>Этот отзыв оказался полезным?</p>
+                                <div class="helpful-review-btns">
+                                    <span class="like-btn"><img src="assets/images/like.svg" alt="Alternate Text"></span>
+                                    <span class="dislike-btn"><img src="assets/images/dislike.svg" alt="Alternate Text"></span>
+                                    <a href="#">Пожаловаться</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion">
+                        <div class="accordion-content accordion140">
+                            <div class="reviews-single-box">
+                                <div class="reviews-single-top">
+                                    <div class="reviews-single-photo">
+                                        <img src="assets/images/person-photo-1.png" alt="Alternate Text">
+                                    </div>
+                                    <div class="reviews-single-info">
+                                        <h4>Андре Феррейра Миранда</h4>
+                                        <div class="review-rating">
+                                            <ul class="rating-list rating-big">
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                                <li class="rating-half"></li>
+                                            </ul>
+                                            <p>4 месяца назад</p>
+                                        </div>
+                                        <div class="reviews-single-content">
+                                            <p>
+                                                Мне очень понравились уроки Excel, которые помогли мне улучшить свои знания. Остальные классы также очень интересны, с&nbsp;множеством практических примеров, которые позволяют мне полностью понять теорию, лежащую в&nbsp;основе этого. Также курс ведется на&nbsp;английском языке, что позволяет мне учиться двумя способами. Сам класс и&nbsp;как пользоваться терминологией на&nbsp;английском языке.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-btn-box">
+                            <div class="accordion-btn"></div>
+                            <div class="is-helpful-review">
+                                <p>Этот отзыв оказался полезным?</p>
+                                <div class="helpful-review-btns">
+                                    <span class="like-btn"><img src="assets/images/like.svg" alt="Alternate Text"></span>
+                                    <span class="dislike-btn"><img src="assets/images/dislike.svg" alt="Alternate Text"></span>
+                                    <a href="#">Пожаловаться</a>
+                                </div>
+                            </div>
+                            <div class="review-answer">
+                                <div class="review-answer-top">
+                                    <div class="review-answer-photo">
+                                        <img src="assets/images/person-photo-2.png" alt="Alternate Text">
+                                    </div>
+                                    <div class="review-answer-info">
+                                        <h4>Петр Орлов</h4>
+                                        <p>
+                                            <span>Ответ преподавателя</span>
+                                            Год назад
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="review-answer-content">
+                                    <p>Здравствуйте, Владимир! Спасибо большое за развернутый комментарий! Это мой первый курс, потому соглашусь, что минусов может быть много. Учту Ваши замечания и при доработках этого и в следующих буду стараться сделать лучше.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion">
+                        <div class="accordion-content accordion140">
+                            <div class="reviews-single-box">
+                                <div class="reviews-single-top">
+                                    <div class="reviews-single-photo">
+                                        <img src="assets/images/person-photo-1.png" alt="Alternate Text">
+                                    </div>
+                                    <div class="reviews-single-info">
+                                        <h4>Андре Феррейра Миранда</h4>
+                                        <div class="review-rating">
+                                            <ul class="rating-list rating-big">
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                                <li class="rating-half"></li>
+                                            </ul>
+                                            <p>4 месяца назад</p>
+                                        </div>
+                                        <div class="reviews-single-content">
+                                            <p>
+                                                Мне очень понравились уроки Excel, которые помогли мне улучшить свои знания. Остальные классы также очень интересны, с&nbsp;множеством практических примеров, которые позволяют мне полностью понять теорию, лежащую в&nbsp;основе этого. Также курс ведется на&nbsp;английском языке, что позволяет мне учиться двумя способами. Сам класс и&nbsp;как пользоваться терминологией на&nbsp;английском языке.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-btn-box">
+                            <div class="accordion-btn"></div>
+                            <div class="is-helpful-review">
+                                <p>Этот отзыв оказался полезным?</p>
+                                <div class="helpful-review-btns">
+                                    <span class="like-btn"><img src="assets/images/like.svg" alt="Alternate Text"></span>
+                                    <span class="dislike-btn"><img src="assets/images/dislike.svg" alt="Alternate Text"></span>
+                                    <a href="#">Пожаловаться</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="big-empty-btn">Соообщить о нарушении</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,85 @@
+<section class="ordering">
+    <div class="container">
+        <div class="ordering-wrap">
+            <div class="ordering-left">
+                <h2 class="title title-left">Checkout</h2>
+                <sub>Billing Address</sub>
+                <select class="select select-country select-big" [(ngModel)]="country">
+                    <option *ngFor="let country of countries" value="{{country.name}}" >{{country.name}}</option>
+                </select>
+                <div class="deliever-choise">
+                    <label class="label-radio" *ngFor="let card of cards">
+                        <input type="radio" value="{{card.last4}}" name="deliver" [(ngModel)]="paymentMethod" #newPaymentCard>
+                        <span>{{card.brand}} {{card.last4}}</span>
+                    </label>
+                    <label class="label-radio">
+                        <input type="radio" value="newPaymentCard" name="deliver" [checked]="true" [(ngModel)]="paymentMethod" #newPaymentCard>
+                        <span>New Payment Card</span>
+                    </label>
+                    <label class="label-radio">
+                        <input type="radio" value="paypal" name="deliver" [(ngModel)]="paymentMethod">
+                        <span>PayPal <img src="assets/images/payPal.svg" alt="Alternate Text"></span>
+                    </label>
+                </div>
+                
+                <form class="ordering-box-form" [ngStyle]="{'display': newPaymentCard.checked ? 'block': 'none'}">
+                    <div class="card-error-box" *ngIf="cardErrors">
+                        <img class="card-error-icon" src="assets/images/warning.svg" alt="">
+                        <div class="card-error-message">{{cardErrors}}</div>
+                    </div>
+                    <input class="input card-input" type="text" name="name" placeholder="Name on Card" required [(ngModel)]="cardHolderName">
+                    <div class="custom-card-input" #cardNumber></div>
+                    <div class="double-input">
+                        <div class="custom-card-input" #cardExpiry></div>
+                        <div class="custom-card-input" #cardCvc></div>
+                    </div>
+                    <input class="input card-input" type="text" name="zip" maxlength="6" placeholder="Zip/Postal Code" required [(ngModel)]="cardHolderZip">
+                    <label class="checkbox">
+                        <input type="checkbox" name="remember" [checked]="this.rememberCard" (change)="this.rememberCard = !this.rememberCard">
+                        <span>Remember this Card</span>
+                    </label>
+                </form>
+
+                <h2 class="title title-left">Order Details</h2>
+                <div class="ordering-details-wrap">
+                    <div class="ordering-details-block" *ngFor="let course of courses">
+                        <a routerLink="/course/{{course.slug}}" class="ordering-details-content">
+                            <img src="http://localhost:8000{{ course.image }}" alt="Alternate Text">
+                            <p>{{ course.title }}</p>
+                        </a>
+                        <div class="basket-course-price-box">
+                            <a class="basket-course-prices" routerLink="/course/{{course.slug}}">
+                                <div class="basket-price">{{ course.discount ? course.discount.new_price : course.price}}$</div>
+                                <div class="basket-new-price" *ngIf="course.discount">{{ course.price}}$</div>
+                            </a>
+                            <svg-icon class="hidden" *ngIf="!course.discount" src="assets/images/price-tag.svg" [svgStyle]="{'width.px': 20, 'height.px': 20, 'fill': '#6f85bd', 'margin': '0 5px 0 8px'}"></svg-icon>
+                            <svg-icon [tooltip]="course.discount.applied_coupon" *ngIf="course.discount" src="assets/images/price-tag.svg" [svgStyle]="{'width.px': 20, 'height.px': 20, 'fill': '#6f85bd', 'margin': '0 5px 0 8px'}"></svg-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ordering-right">
+                <h4>Summary</h4>
+                <div class="ordering-sub-top">
+                    <p>Original price</p>
+                    <p>{{subtotal}}$</p>
+                </div>
+                <div class="ordering-sub-top" *ngIf="total !== subtotal">
+                    <p>Discounts</p>
+                    <p>-{{subtotal - total | number: ".2-2" }}$</p>
+                </div>
+                <div class="ordering-sub-bottom">
+                    <p>Total:</p>
+                    <p>{{total}}$</p>
+                </div>
+                <p class="ordering-text">
+                    AStudy is required by law to collect applicable transaction taxes for purchases made in certain tax jurisdictions.
+                </p>
+                <p class="ordering-text">
+                    By completing your purchase you agree to these <a href="#">Terms of Service.</a>
+                </p>
+                <button class="btn-blue" (click)="handleCardConfirmation()" [disabled]="loading">Complete Payment</button>
+            </div>
+        </div>
+    </div>
+</section>
